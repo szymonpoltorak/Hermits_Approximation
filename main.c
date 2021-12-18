@@ -23,9 +23,7 @@ char *usage =
   "               - n_points must be > 1\n"
   "            endif\n";
 
-int
-main (int argc, char **argv)
-{
+int main (int argc, char **argv){
   int opt;
   char *inp = NULL;
   char *out = NULL;
@@ -67,11 +65,14 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
   }
+
 	if( optind < argc ) {
 		fprintf( stderr, "\nBad parameters!\n" );
+
 		for( ; optind < argc; optind++ )
 			fprintf( stderr, "\t\"%s\"\n", argv[optind] );
-		fprintf( stderr, "\n" );
+		
+    fprintf( stderr, "\n" );
 		fprintf( stderr, usage, progname );
 		exit( EXIT_FAILURE );
 	}
@@ -79,22 +80,22 @@ main (int argc, char **argv)
   /* if points-file was given, then read points, generate spline, save it to file */
   if (inp != NULL) {
     FILE *ouf = NULL; /* we shall open it later, when we shall get points */
-
     FILE *inf = fopen (inp, "r");
+ 
     if (inf == NULL) {
       fprintf (stderr, "%s: can not read points file: %s\n\n", argv[0], inp);
       exit (EXIT_FAILURE);
     }
 
     if (read_pts_failed (inf, &pts)) {
-      fprintf (stderr, "%s: bad contents of points file: %s\n\n", argv[0],
-               inp);
+      fprintf (stderr, "%s: bad contents of points file: %s\n\n", argv[0], inp);
       exit (EXIT_FAILURE);
     }
     else
       fclose (inf);
 
     ouf = fopen (out, "w");
+
     if (ouf == NULL) {
       fprintf (stderr, "%s: can not write spline file: %s\n\n", argv[0], out);
       exit (EXIT_FAILURE);
@@ -106,18 +107,21 @@ main (int argc, char **argv)
 			write_spl (&spl, ouf);
 
     fclose (ouf);
-  } else if (out != NULL) {  /* if point-file was NOT given, try to read splines from a file */
+  } 
+  else if (out != NULL) {  /* if point-file was NOT given, try to read splines from a file */
     FILE *splf = fopen (out, "r");
+
     if (splf == NULL) {
       fprintf (stderr, "%s: can not read spline file: %s\n\n", argv[0], inp);
       exit (EXIT_FAILURE);
     }
+
     if (read_spl (splf, &spl)) {
-      fprintf (stderr, "%s: bad contents of spline file: %s\n\n", argv[0],
-               inp);
+      fprintf (stderr, "%s: bad contents of spline file: %s\n\n", argv[0], inp);
       exit (EXIT_FAILURE);
     }
-  } else { /* ponts were not given nor spline was given -> it is an error */
+  }
+  else { /* ponts were not given nor spline was given -> it is an error */
     fprintf (stderr, usage, argv[0]);
     exit (EXIT_FAILURE);
   }
@@ -130,31 +134,31 @@ main (int argc, char **argv)
   /* check if plot was requested and generate it if yes */
   if (gpt != NULL && n > 1) { 
     FILE *gpf = fopen (gpt, "w");
-    int i;
     double dx;
+
 		if( fromX == 0 && toX == 0 ) { /* calculate plot range if it was not specified */
 			if( pts.n > 1 ) {
-				fromX= pts.x[0];
-				toX=   pts.x[pts.n-1];
-			} else if( spl.n > 1 ) {
-				fromX= spl.x[0];
-				toX=   spl.x[spl.n-1];
-			} else {
-				fromX= 0;
-				toX= 1;
+				fromX = pts.x[0];
+				toX = pts.x[pts.n-1];
+			}
+      else if( spl.n > 1 ) {
+				fromX = spl.x[0];
+				toX = spl.x[spl.n-1];
+			} 
+      else {
+				fromX = 0;
+				toX = 1;
 			}
 		}
     dx = (toX - fromX) / (n - 1);
 
     if (gpf == NULL) {
-      fprintf (stderr, "%s: can not write gnuplot file: %s\n\n", argv[0],
-               gpt);
+      fprintf (stderr, "%s: can not write gnuplot file: %s\n\n", argv[0], gpt);
       exit (EXIT_FAILURE);
     }
 
-    for (i = 0; i < n; i++)
-      fprintf (gpf, "%g %g\n", fromX + i * dx,
-               value_spl (&spl, fromX + i * dx));
+    for (int i = 0; i < n; i++)
+      fprintf (gpf, "%g %g\n", fromX + i * dx, value_spl (&spl, fromX + i * dx));
 
     fclose (gpf);
   }
