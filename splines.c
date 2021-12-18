@@ -15,7 +15,6 @@ int alloc_spl (spline_t * spl, int n){
 }
 
 int read_spl (FILE * inf, spline_t * spl){
-  //int i;
   if (fscanf (inf, "%d", &(spl->n)) != 1 || spl->n < 0)
     return 1;
 
@@ -32,7 +31,6 @@ int read_spl (FILE * inf, spline_t * spl){
 }
 
 void write_spl (spline_t * spl, FILE * ouf){
-  //int i;
   fprintf (ouf, "%d\n", spl->n);
   for (int i = 0; i < spl->n; i++)
     fprintf (ouf, "%g %g %g %g %g\n", spl->x[i], spl->f[i], spl->f1[i],
@@ -40,10 +38,9 @@ void write_spl (spline_t * spl, FILE * ouf){
 }
 
 double value_spl (spline_t * spl, double x){
-  int i;
   double dx;
 
-  for (i = spl->n - 1; i > 0; i--)
+  for (int i = spl->n - 1; i > 0; i--)
     if (spl->x[i] < x)
       break;
 

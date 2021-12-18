@@ -41,7 +41,6 @@ double get_entry_matrix (matrix_t * m, int i, int j ){
 
 matrix_t *read_matrix (FILE * in){
   int rn, cn;
-  //int i, j;
   matrix_t *new_mat;
   if (fscanf (in, "%d %d", &rn, &cn) != 2)
     return NULL;
@@ -60,7 +59,6 @@ matrix_t *read_matrix (FILE * in){
 }
 
 void write_matrix (matrix_t * m, FILE * out){
-  //int i, j;
   if (m == NULL) {
     fprintf (out, "Matrix is NULL\n");
     return;
@@ -96,7 +94,6 @@ matrix_t *transpose_matrix (matrix_t * s){
   if (s != NULL)
     d = make_matrix (s->rn, s->cn);
   if (d != NULL) {
-    //int i, j;
     for (int i = 0; i < s->rn; i++)
       for (int j = 0; j < s->cn; j++)
         *(d->e + j * d->cn + i) = *(s->e + i * s->cn + j);
@@ -107,7 +104,6 @@ matrix_t *transpose_matrix (matrix_t * s){
 
 void xchg_rows (matrix_t * m, int i, int j){
   if (m != NULL && i >= 0 && i < m->rn && j >= 0 && j < m->rn) {
-    //int k;
     double tmp;
     for (int k = 0; k < m->cn; k++) {
       tmp = *(m->e + i * m->cn + k);
@@ -119,7 +115,6 @@ void xchg_rows (matrix_t * m, int i, int j){
 
 void xchg_cols (matrix_t * m, int i, int j){
   if (m != NULL && i >= 0 && i < m->cn && j >= 0 && j < m->cn) {
-    //int k;
     double tmp;
     for (int k = 0; k < m->rn; k++) {
       tmp = *(m->e + k * m->cn + i);
@@ -134,7 +129,6 @@ matrix_t *mull_matrix (matrix_t * a, matrix_t * b){
     return NULL;
   else {
     matrix_t *c = make_matrix (a->rn, b->cn);
-    //int i, j, k;
     if (c == NULL)
       return NULL;
 
@@ -154,11 +148,6 @@ matrix_t *ge_matrix (matrix_t * a){
   matrix_t *c = copy_matrix (a);
 
   if (c != NULL) {
-    //int i, j, k;
-    //int cn = c->cn;
-    //int rn = c->rn;
-    //double *e = c->e;
-
     for (int k = 0; k < c->rn - 1; k++) {      /* eliminujemy (zerujemy) kolumnę nr k */
       for (int i = k + 1; i < c->rn; i++) {    /* pętla po kolejnych
                                            wierszach poniżej diagonalii k,k */
@@ -173,19 +162,14 @@ matrix_t *ge_matrix (matrix_t * a){
 
 int bs_matrix (matrix_t * a){
   if (a != NULL) {
-    //int r, c, k;
-    //int cn = a->cn;
-    //int rn = a->rn;
-    double *e = a->e;
-
     for (int k = a->rn; k < a->cn; k++) { /* pętla po prawych stronach */
       for (int r = a->rn - 1; r >= 0; r--) {   /* petla po niewiadomych */
-        double rhs = *(e + r * a->cn + k); /* wartość prawej strony */
+        double rhs = *(a->e + r * a->cn + k); /* wartość prawej strony */
         
         for (int c = a->rn - 1; c > r; c--)    /* odejmujemy wartości już wyznaczonych niewiadomych *
                                            pomnożone przed odpowiednie współczynniki */
-          rhs -= *(e + r * a->cn + c) * *(e + c * a->cn + k);
-        *(e + r * a->cn + k) = rhs / *(e + r * a->cn + r);    /* nowa wartość to prawa strona / el. diagonalny */
+          rhs -= *(a->e + r * a->cn + c) * *(a->e + c * a->cn + k);
+        *(a->e + r * a->cn + k) = rhs / *(a->e + r * a->cn + r);    /* nowa wartość to prawa strona / el. diagonalny */
       }
     }
     return 0;

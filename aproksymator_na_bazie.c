@@ -18,7 +18,6 @@ double fi(double a, double b, int n, int i, double x){
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
-	//int j;
 
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
@@ -41,7 +40,6 @@ double dfi(double a, double b, int n, int i, double x){
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
-	//int	j;
 
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
@@ -64,7 +62,6 @@ double d2fi(double a, double b, int n, int i, double x){
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
-	//int	j;
 
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
@@ -87,7 +84,6 @@ double d3fi(double a, double b, int n, int i, double x){
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
-	//int	j;
 
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
@@ -110,7 +106,6 @@ double xfi(double a, double b, int n, int i, FILE *out){
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
-	//int	j;
 
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
@@ -130,7 +125,6 @@ void make_spl(points_t * pts, spline_t * spl){
 	double *y = pts->y;
 	double a = x[0];
 	double b = x[pts->n - 1];
-	//int	i, j, k;
 	int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
 	char *nbEnv= getenv( "APPROX_BASE_SIZE" );
 

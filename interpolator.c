@@ -8,7 +8,6 @@ void make_spl (points_t * pts, spline_t * spl){
 	matrix_t *eqs= make_matrix( n*3, n*3+1 );
 	double *x = pts->x;
 	double *y = pts->y;
-	//int i;
 
 	for(int i = 0; i < n; i++ ) {
 		double dx= x[i+1] - x[i];

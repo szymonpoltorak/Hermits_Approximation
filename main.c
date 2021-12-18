@@ -134,7 +134,6 @@ int main (int argc, char **argv){
   /* check if plot was requested and generate it if yes */
   if (gpt != NULL && n > 1) { 
     FILE *gpf = fopen (gpt, "w");
-    //int i;
     double dx;
 
 		if( fromX == 0 && toX == 0 ) { /* calculate plot range if it was not specified */

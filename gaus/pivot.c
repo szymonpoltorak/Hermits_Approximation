@@ -5,10 +5,6 @@
 matrix_t *pivot_ge_matrix (matrix_t * a, int *row_per){
   matrix_t *c = copy_matrix (a);
   if (c != NULL) {
-    //int i, j, k;
-    //int cn = c->cn;
-    //int rn = c->rn;
-    //double *e = c->e;
     for (int i = 0; i < c->rn; i++)
       row_per[i] = i;
     for (int k = 0; k < c->rn - 1; k++) {      /* eliminujemy (zerujemy) kolumnę nr k */
@@ -38,10 +34,6 @@ matrix_t *pivot_ge_matrix (matrix_t * a, int *row_per){
 }
 
 void pivot_ge_in_situ_matrix (matrix_t * c){
-  //int i, j, k;
-  //int cn = c->cn;
-  //int rn = c->rn;
-  //double *e = c->e;
   for (int k = 0; k < c->rn - 1; k++) {        /* eliminujemy (zerujemy) kolumnę nr k */
     int piv = k;                /* wybór elementu dominującego - maks. z k-tej kol., poniżej diag */
     
@@ -67,11 +59,6 @@ matrix_t *symm_pivot_ge_matrix (matrix_t * a, int *row_per){
   matrix_t *c = copy_matrix (a);
 
   if (c != NULL) {
-    //int i, j, k;
-    //int cn = c->cn;
-    //int rn = c->rn;
-    //double *e = c->e;
-
     for (int i = 0; i < c->rn; i++)
       row_per[i] = i;
     
@@ -105,7 +92,6 @@ matrix_t *symm_pivot_ge_matrix (matrix_t * a, int *row_per){
 int *pivot_get_inv_per (matrix_t * m, int *row_per){
   /* odtwarzamy oryginalną kolejność niewiadowmych */
   int *iper = malloc (m->rn * sizeof *iper);
-  //int i;
 
   for (int i = 0; i < m->rn; i++)
     iper[row_per[i]] = i;

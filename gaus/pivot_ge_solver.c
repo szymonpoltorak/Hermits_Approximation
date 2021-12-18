@@ -25,7 +25,6 @@ int main (int argc, char **argv){
         c = pivot_ge_matrix (m, row_per);
       
       if (c != NULL) {
-        //int i;
         printf ("\nPo elim. Gaussa:\n");
         write_matrix (c, stdout);
         printf ("Permutacja:");
@@ -35,7 +34,6 @@ int main (int argc, char **argv){
         printf ("\n");
 
         if (bs_matrix (c) == 0) {
-          //int j;
           int *iper = pivot_get_inv_per (c, row_per);
           printf ("Permutacja odwrotna:");
 
