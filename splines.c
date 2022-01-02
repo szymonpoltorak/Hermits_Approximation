@@ -38,9 +38,10 @@ void write_spl (spline_t * spl, FILE * ouf){
 }
 
 double value_spl (spline_t * spl, double x){
+  int i;
   double dx;
 
-  for (int i = spl->n - 1; i > 0; i--)
+  for (i = spl->n - 1; i > 0; i--)
     if (spl->x[i] < x)
       break;
 
