@@ -5,7 +5,7 @@
 
 double fun( double x ) {
 	double r = ((double)rand() - RAND_MAX/2.0)/RAND_MAX/5; // +-10%
-	return (1+r)*(10*x*x*x*x+5*x*x*x+x*x);
+	return (1 + r)*(10 * x * x * x * x + 5 * x * x * x + x * x);
 }
 
 int main( int argc, char **argv ) {
@@ -15,7 +15,6 @@ int main( int argc, char **argv ) {
 	FILE *out= argc > 4 ? fopen( argv[4], "w" ) : stdout;
 
 	srand( argc > 5 ? atoi(argv[5]) : time(NULL) );
-				//int i;
 	double dx = (b-a)/(n-1);
 
 	for(int i =0; i < n; i++ ) {

@@ -22,9 +22,7 @@ int read_spl (FILE * inf, spline_t * spl){
     return 1;
 
   for (int i = 0; i < spl->n; i++)
-    if (fscanf
-        (inf, "%lf %lf %lf %lf %lf", spl->x + i, spl->f + i, spl->f1 + i,
-         spl->f2 + i, spl->f3 + i) != 5)
+    if (fscanf(inf, "%lf %lf %lf %lf %lf", spl->x + i, spl->f + i, spl->f1 + i, spl->f2 + i, spl->f3 + i) != 5)
       return 1;
 
   return 0;
@@ -33,21 +31,18 @@ int read_spl (FILE * inf, spline_t * spl){
 void write_spl (spline_t * spl, FILE * ouf){
   fprintf (ouf, "%d\n", spl->n);
   for (int i = 0; i < spl->n; i++)
-    fprintf (ouf, "%g %g %g %g %g\n", spl->x[i], spl->f[i], spl->f1[i],
-             spl->f2[i], spl->f3[i]);
+    fprintf (ouf, "%g %g %g %g %g\n", spl->x[i], spl->f[i], spl->f1[i],spl->f2[i], spl->f3[i]);
 }
 
 double value_spl (spline_t * spl, double x){
+  int i;
   double dx;
 
-  for (int i = spl->n - 1; i > 0; i--)
+  for (i = spl->n - 1; i > 0; i--)
     if (spl->x[i] < x)
       break;
 
   dx = x - spl->x[i];
 
-  return spl->f[i]
-	+ dx * spl->f1[i]
-	+ dx * dx / 2 *  spl->f2[i] 
-	+ dx * dx * dx / 6 * spl->f3[i];
+  return spl->f[i]+ dx * spl->f1[i]+ dx * dx / 2 *  spl->f2[i] + dx * dx * dx / 6 * spl->f3[i];
 }
