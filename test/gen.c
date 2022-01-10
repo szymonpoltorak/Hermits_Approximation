@@ -15,7 +15,6 @@ int main( int argc, char **argv ) {
 	FILE *out= argc > 4 ? fopen( argv[4], "w" ) : stdout;
 
 	srand( argc > 5 ? atoi(argv[5]) : time(NULL) );
-				//int i;
 	double dx = (b-a)/(n-1);
 
 	for(int i =0; i < n; i++ ) {

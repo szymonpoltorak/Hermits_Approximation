@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+aprox
+myplot
+splines.c
+spl
+intrp
+gen
+prosta

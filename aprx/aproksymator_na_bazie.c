@@ -1,5 +1,5 @@
 #include "makespl.h"
-#include "piv_ge_solver.h"
+#include "../gaus/piv_ge_solver.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -180,14 +180,14 @@ void make_spl(points_t * pts, spline_t * spl){
 		for (int i = 0; i < spl->n; i++) {
 			double xx = spl->x[i] = a + i*(b-a)/(spl->n-1);
 			
-			xx+= 10.0*DBL_EPSILON;  // zabezpieczenie przed ulokowaniem punktu w poprzednim przedziale
+			xx+= 10.0 * DBL_EPSILON;  // zabezpieczenie przed ulokowaniem punktu w poprzednim przedziale
 			spl->f[i] = 0;
 			spl->f1[i] = 0;
 			spl->f2[i] = 0;
 			spl->f3[i] = 0;
 			
 			for (int k = 0; k < nb; k++) {
-				double		ck = get_entry_matrix(eqs, k, nb);
+				double ck = get_entry_matrix(eqs, k, nb);
 				
 				spl->f[i]  += ck * fi  (a, b, nb, k, xx);
 				spl->f1[i] += ck * dfi (a, b, nb, k, xx);

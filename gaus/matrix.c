@@ -65,8 +65,8 @@ void write_matrix (matrix_t * m, FILE * out){
   }
 
   fprintf (out, "%d %d\n", m->rn, m->cn);
-  for (int i = 0; i < m->rn; i++) {
-    for (int j = 0; j < m->cn - 1; j++)
+  for (int i = 0, j; i < m->rn; i++) {
+    for (j = 0; j < m->cn - 1; j++)
       fprintf (out, "%8.5f ", m->e[i * m->cn + j]);
     fprintf (out, "%8.5f\n", m->e[i * m->cn + j]);
   }
