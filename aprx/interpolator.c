@@ -1,6 +1,6 @@
 #include "makespl.h"
 #include "piv_ge_solver.h"
-
+#include <stdlib.h>
 #include <stdio.h>
 
 void make_spl (points_t * pts, spline_t * spl){
@@ -34,21 +34,13 @@ void make_spl (points_t * pts, spline_t * spl){
 			put_entry_matrix( eqs, if3, if3+2, -1 );
 	}
 
-#ifdef DEBUG
-	write_matrix( eqs, stdout );
-#endif
-
 	if( piv_ge_solver( eqs ) ) {
 		spl->n = 0;
 		return;
 	}
 
-#ifdef DEBUG
-	write_matrix( eqs, stdout );
-#endif
-
-  if ( alloc_spl (spl, pts->n) == 0 ) {
-    spl->n = pts->n;
+	if ( alloc_spl (spl, pts->n) == 0 ) {
+		spl->n = pts->n;
 
 		for(int i = 0; i < n; i++ ) {
 			spl->x[i]= pts->x[i];
@@ -56,12 +48,13 @@ void make_spl (points_t * pts, spline_t * spl){
 			spl->f1[i]= get_entry_matrix( eqs, 3*i,   3*n );
 			spl->f2[i]= get_entry_matrix( eqs, 3*i+1, 3*n );
 			spl->f3[i]= get_entry_matrix( eqs, 3*i+2, 3*n );
-		}
-		
+		}			
 		spl->x[n]= pts->x[n];
 		spl->f[n]= pts->y[n];
 		spl->f1[n]= spl->f1[n-1];
 		spl->f2[n]= 0;
 		spl->f3[n]= 0;
-  }
+	}
+	free(eqs -> e);
+	free(eqs);
 }

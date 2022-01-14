@@ -12,7 +12,7 @@ int main (int argc, char **argv){
 
     if (m != NULL) {
       matrix_t *c = NULL;
-      int *row_per = malloc (m->rn * sizeof *row_per);
+      int *row_per = (int*) malloc (m->rn * sizeof *row_per);
 
       printf ("\nMacierz:\n");
       write_matrix (m, stdout);
@@ -56,11 +56,13 @@ int main (int argc, char **argv){
           }
         }
       }
-      else
+      else {
         printf ("nie lula!\n");
+      }
     }
     return 0;
   }
-  else
+  else {
     return 1;
+  }
 }

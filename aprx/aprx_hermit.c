@@ -14,7 +14,7 @@
  * - numer funkcji x - wspolrzedna dla ktorej obliczana jest wartosc funkcji
  */
 
-double fi(double a, double b, int n, int i, double x){
+static double fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -31,12 +31,12 @@ double fi(double a, double b, int n, int i, double x){
 		return 1 / h3 * (h3 + 3 * h * h * (x - hx[1]) + 3 * h * (x - hx[1]) * (x - hx[1]) - 3 * (x - hx[1]) * (x - hx[1]) * (x - hx[1]));
 	else if (x > hx[2] && x <= hx[3])
 		return 1 / h3 * (h3 + 3 * h * h * (hx[3] - x) + 3 * h * (hx[3] - x) * (hx[3] - x) - 3 * (hx[3] - x) * (hx[3] - x) * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	else if ((x > hx[3]) && (x <= hx[4]))
 		return 1 / h3 * (hx[4] - x) * (hx[4] - x) * (hx[4] - x);
 }
 
 /* Pierwsza pochodna fi */
-double dfi(double a, double b, int n, int i, double x){
+static double dfi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -53,12 +53,12 @@ double dfi(double a, double b, int n, int i, double x){
 		return 1 / h3 * (3 * h * h + 6 * h * (x - hx[1]) - 9 * (x - hx[1]) * (x - hx[1]));
 	else if (x > hx[2] && x <= hx[3])
 		return 1 / h3 * (-3 * h * h - 6 * h * (hx[3] - x) + 9 * (hx[3] - x) * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	else if ((x > hx[3]) && (x <= hx[4]))
 		return -3 / h3 * (hx[4] - x) * (hx[4] - x);
 }
 
 /* Druga pochodna fi */
-double d2fi(double a, double b, int n, int i, double x){
+static double d2fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -75,12 +75,12 @@ double d2fi(double a, double b, int n, int i, double x){
 		return 1 / h3 * (6 * h - 18 * (x - hx[1]));
 	else if (x > hx[2] && x <= hx[3])
 		return 1 / h3 * (6 * h  -18 * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	else if ((x > hx[3]) && (x <= hx[4]))
 		return 6 / h3 * (hx[4] - x);
 }
 
 /* Trzecia pochodna fi */
-double d3fi(double a, double b, int n, int i, double x){
+static double d3fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -97,8 +97,20 @@ double d3fi(double a, double b, int n, int i, double x){
 		return -18 / h3;
 	else if (x > hx[2] && x <= hx[3])
 		return 18 / h3;
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	else if ((x > hx[3]) && (x <= hx[4]))
 		return -6 / h3;
+}
+
+static double Hn(double x,int n){
+    if (n == 0){
+        return 1;
+    }
+    else if (n == 1){
+        return 2 * x;
+    }
+    else{
+        return 2 * x * Hn(x,n-1) - 2 * (n-1) * Hn(x,n-2);     
+    } 
 }
 
 void make_spl(points_t * pts, spline_t * spl){
@@ -109,8 +121,9 @@ void make_spl(points_t * pts, spline_t * spl){
     int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
 	char *nbEnv= getenv( "APPROX_BASE_SIZE" );
 
-	if( nbEnv != NULL && atoi( nbEnv ) > 0 )
+	if( nbEnv != NULL && atoi( nbEnv ) > 0 ) {
 		nb = atoi( nbEnv );
+    }
 
 	matrix_t *eqs = make_matrix(nb, nb + 1); // tworzenie macierzy ukladu rownan
 
@@ -150,4 +163,6 @@ void make_spl(points_t * pts, spline_t * spl){
 			}
 		}
 	}
+    free(eqs -> e);
+    free(eqs);
 }

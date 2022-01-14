@@ -91,7 +91,7 @@ matrix_t *symm_pivot_ge_matrix (matrix_t * a, int *row_per){
 
 int *pivot_get_inv_per (matrix_t * m, int *row_per){
   /* odtwarzamy oryginalną kolejność niewiadowmych */
-  int *iper = malloc (m->rn * sizeof *iper);
+  int *iper = (int*) malloc (m->rn * sizeof *iper);
 
   for (int i = 0; i < m->rn; i++)
     iper[row_per[i]] = i;

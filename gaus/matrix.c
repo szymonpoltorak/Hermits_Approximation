@@ -4,10 +4,10 @@
 #include <string.h>
 
 matrix_t *make_matrix (int rn, int cn){
-  matrix_t *new_mat = malloc (sizeof *new_mat);
+  matrix_t *new_mat = (matrix_t*) malloc (sizeof *new_mat);
   if (new_mat == NULL)
     return NULL;
-  if ((new_mat->e = malloc ((size_t) rn * (size_t) cn * sizeof *new_mat->e)) == NULL) {
+  if ((new_mat->e = (double*) malloc ((size_t) rn * (size_t) cn * sizeof *new_mat->e)) == NULL) {
     free (new_mat);
     return NULL;
   }
@@ -79,11 +79,6 @@ matrix_t *copy_matrix (matrix_t * s){
     d = make_matrix (s->rn, s->cn);
   if (d != NULL) {
     memcpy (d->e, s->e, s->rn * s->cn * sizeof *s->e);
-    /* int i;
-       for( i= 0; i < s->rn*s->cn; i++ )
-       *(d->e+i)= *(s->e+i);
-     */
-    /* d->rn= s->rn; d->cn= s->cn; done in make_matrix */
   }
   return d;
 }
@@ -97,7 +92,6 @@ matrix_t *transpose_matrix (matrix_t * s){
     for (int i = 0; i < s->rn; i++)
       for (int j = 0; j < s->cn; j++)
         *(d->e + j * d->cn + i) = *(s->e + i * s->cn + j);
-    /* d->rn= s->cn; d->cn= s->rn; done in make_matrix */
   }
   return d;
 }
