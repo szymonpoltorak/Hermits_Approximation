@@ -3,6 +3,7 @@
 
 #include "matrix.h"
 
+//uzycie eliminacji gaussa
 int piv_ge_solver( matrix_t * eqs );
 
 #endif

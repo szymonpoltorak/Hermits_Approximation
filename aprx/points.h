@@ -4,11 +4,12 @@
 #include <stdio.h>
 
 typedef struct {
-		int n;
-		double *x;
-		double *y;
+		int n; //indeksy tablic x i y
+		double *x; // tablica wspolrzednych x
+		double *y; // tablica wspolrzednych y
 } points_t;
 
+// wczytywanie punktow
 int read_pts_failed ( FILE* inf, points_t *pts);
 
 #endif

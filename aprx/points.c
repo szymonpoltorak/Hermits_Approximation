@@ -1,13 +1,12 @@
 #include "points.h"
 #include <stdlib.h>
 
-static int realloc_pts_failed (points_t * pts, int size)
-{
+static int realloc_pts_failed (points_t * pts, int size) { // realokowanie pamięci
   return realloc (pts->x, size * sizeof *pts->x) == NULL || realloc (pts->y, size * sizeof *pts->y) == NULL;
 }
 
 int read_pts_failed (FILE * inf, points_t * pts){
-  int size;
+  int size; // potrzebna do alokowania pamieci
   double x, y;
 
   if (pts->n == 0) {
