@@ -71,7 +71,7 @@ int main (int argc, char **argv){
 
       for( ; optind < argc; optind++ )
         fprintf( stderr, "\t\"%s\"\n", argv[optind] );
-      
+
       fprintf( stderr, "\n" );
       fprintf( stderr, usage, progname );
       exit( EXIT_FAILURE );
@@ -80,7 +80,7 @@ int main (int argc, char **argv){
     /* if points-file was given, then read points, generate spline, save it to file */
     if (inp != NULL) {
       FILE *inf = fopen (inp, "r");
-  
+
       if (inf == NULL) {
         fprintf (stderr, "%s: can not read points file: %s\n\n", argv[0], inp);
         exit (EXIT_FAILURE);
@@ -88,7 +88,7 @@ int main (int argc, char **argv){
 
       if (read_pts_failed (inf, &pts)) {
         fprintf (stderr, "%s: bad contents of points file: %s\n\n", argv[0], inp);
-        free_points(&pts);
+        //free_points(&pts);
         exit (EXIT_FAILURE);
       }
       else
@@ -98,7 +98,7 @@ int main (int argc, char **argv){
 
       if (ouf == NULL) {
         fprintf (stderr, "%s: can not write spline file: %s\n\n", argv[0], out);
-        free_points(&pts);       
+        //free_points(&pts);
         exit (EXIT_FAILURE);
       }
 
@@ -108,7 +108,7 @@ int main (int argc, char **argv){
         write_spl (&spl, ouf);
 
       fclose (ouf);
-    } 
+    }
     else if (out != NULL) {  /* if point-file was NOT given, try to read splines from a file */
       FILE *splf = fopen (out, "r");
 
@@ -129,12 +129,12 @@ int main (int argc, char **argv){
 
     if (spl.n < 1) { /* check if there is a valid spline */
       fprintf (stderr, "%s: bad spline: n=%d\n\n", argv[0], spl.n);
-      free_points(&pts);      
+      //free_points(&pts);
       exit (EXIT_FAILURE);
     }
 
     /* check if plot was requested and generate it if yes */
-    if (gpt != NULL && n > 1) { 
+    if (gpt != NULL && n > 1) {
       FILE *gpf = fopen (gpt, "w");
 
       if( fromX == 0 && toX == 0 ) { /* calculate plot range if it was not specified */
@@ -145,7 +145,7 @@ int main (int argc, char **argv){
         else if( spl.n > 1 ) {
           fromX = spl.x[0];
           toX = spl.x[spl.n-1];
-        } 
+        }
         else {
           fromX = 0;
           toX = 1;
@@ -155,8 +155,8 @@ int main (int argc, char **argv){
 
       if (gpf == NULL) {
         fprintf (stderr, "%s: can not write gnuplot file: %s\n\n", argv[0], gpt);
-        free_points(&pts);
-        free_splines(&spl);
+        //free_points(&pts);
+        //free_splines(&spl);
         exit (EXIT_FAILURE);
       }
 
@@ -165,8 +165,8 @@ int main (int argc, char **argv){
 
       fclose (gpf);
     }
-    free_points(&pts);
-    free_splines(&spl);
+    //free_points(&pts);
+    //free_splines(&spl);
 
     return 0;
 }

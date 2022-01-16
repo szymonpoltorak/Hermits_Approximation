@@ -4,16 +4,16 @@
 #include <stdlib.h>
 #include <float.h>
 
-double Hn(double x, int n){			
+double Hn(double x, int n){
 	if ( n == 0 ) {
 		return 	1;
-	} 
+	}
 	else if ( n == 1 ) {
 		return 	2 * x;
-	} 
+	}
 	else {
-        return  2 * x * Hn(x, n - 1) - 2 * Hn(x, n - 1) * Hn(x, n - 2);
-	} 
+        return  2 * x * Hn(x, n - 1) - 2 * (n - 1) * Hn(x, n - 2);
+	}
 }
 
 double dHn(double x, int n){
@@ -53,6 +53,7 @@ double d3Hn(double x, int n){
 }
 
 void make_spl(points_t * pts, spline_t * spl){
+	matrix_t* eqs = NULL;
 	double *x = pts->x;
 	double *y = pts->y;
 	double a = x[0]; // przypisz wspolrzedna x pierwszego punktu
@@ -64,7 +65,7 @@ void make_spl(points_t * pts, spline_t * spl){
 		nb = atoi( nbEnv );
     }
 
-	matrix_t *eqs = make_matrix(nb, nb + 1); // tworzenie macierzy ukladu rownan
+	eqs = make_matrix(nb, nb + 1);
 
 	for (int j = 0; j < nb; j++) {
 		for (int i = 0; i < nb; i++) {
@@ -85,16 +86,16 @@ void make_spl(points_t * pts, spline_t * spl){
 	if (alloc_spl(spl, nb) == 0) {
 		for (int i = 0; i < spl->n; i++) {
 			double xx = spl->x[i] = a + i*(b-a)/(spl->n-1);
-			
+
 			xx+= 10.0 * DBL_EPSILON;
 			spl->f[i] = 0;
 			spl->f1[i] = 0;
 			spl->f2[i] = 0;
 			spl->f3[i] = 0;
-			
+
 			for (int k = 0; k < nb; k++) {
 				double ck = get_entry_matrix(eqs, k, nb);
-				
+
 				spl->f[i]  += ck * Hn  (xx, k);
 				spl->f1[i] += ck * dHn (xx, k);
 				spl->f2[i] += ck * d2Hn(xx, k);

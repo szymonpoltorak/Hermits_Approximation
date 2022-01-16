@@ -15,7 +15,7 @@ void free_splines(spline_t* spl) {
 int alloc_spl (spline_t * spl, int n){
   spl->n = n;
 
-  return MALLOC_FAILED (spl->x, spl->n) || MALLOC_FAILED (spl->f, spl->n) || MALLOC_FAILED (spl->f1, spl->n)|| MALLOC_FAILED (spl->f2, spl->n)|| MALLOC_FAILED (spl->f3, spl->n);
+  return MALLOC_FAILED (spl->x, spl->n) || MALLOC_FAILED (spl->f, spl->n) || MALLOC_FAILED (spl->f1, spl->n) || MALLOC_FAILED (spl->f2, spl->n) || MALLOC_FAILED (spl->f3, spl->n);
 }
 
 int read_spl (FILE * inf, spline_t * spl){
@@ -34,7 +34,7 @@ int read_spl (FILE * inf, spline_t * spl){
 
 void write_spl (spline_t * spl, FILE * ouf){
   fprintf (ouf, "%d\n", spl->n);
-  
+
   for (int i = 0; i < spl->n; i++)
     fprintf (ouf, "%g %g %g %g %g\n", spl->x[i], spl->f[i], spl->f1[i], spl->f2[i], spl->f3[i]);
 }

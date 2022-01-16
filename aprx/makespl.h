@@ -1,4 +1,4 @@
-#ifndef MAKESPL_H_
+#ifndef MAKESPL_H
 #define MAKESPL_H
 
 #include "points.h"
