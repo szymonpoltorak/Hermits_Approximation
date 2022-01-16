@@ -12,7 +12,7 @@ double Hn(double x, int n){
 		return 	2 * x;
 	}
 	else {
-        return  2 * x * Hn(x, n - 1) - 2 * (n - 1) * Hn(x, n - 2);
+    return  2 * x * Hn(x, n - 1) - 2 * (n - 1) * Hn(x, n - 2);
 	}
 }
 
@@ -58,24 +58,22 @@ void make_spl(points_t * pts, spline_t * spl){
 	double *y = pts->y;
 	double a = x[0]; // przypisz wspolrzedna x pierwszego punktu
 	double b = x[pts->n - 1]; // przypisz wspolrzedna ostatniego punktu
-    int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
+  int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
 	char *nbEnv= getenv( "APPROX_BASE_SIZE" );
 
 	if( nbEnv != NULL && atoi( nbEnv ) >= 0 ) {
 		nb = atoi( nbEnv ) + 1;
-    }
-
+  }
 	eqs = make_matrix(nb, nb + 1);
-
 	for (int j = 0; j < nb; j++) {
 		for (int i = 0; i < nb; i++) {
 			for (int k = 0; k < pts->n; k++) {
 				add_to_entry_matrix(eqs, j, i, Hn(x[k],i) * Hn(x[k],j));
-            }
         }
+    }
 		for (int k = 0; k < pts->n; k++){
 			add_to_entry_matrix(eqs, j, nb, y[k] * Hn(x[k], j));
-        }
+    }
 	}
 
 	if (piv_ge_solver(eqs)) { // obsluga bledu przy eliminacji gaussa
