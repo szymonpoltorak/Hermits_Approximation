@@ -5,10 +5,10 @@
 #include <float.h>
 
 double Hn(double x, int n){
-	if ( n == 0 ) {
+	if (n == 0) {
 		return 	1;
 	}
-	else if ( n == 1 ) {
+	else if (n == 1) {
 		return 	2 * x;
 	}
 	else {
@@ -29,10 +29,7 @@ double dHn(double x, int n){
 }
 
 double d2Hn(double x, int n){
-	if (n == 0){
-		return 0;
-	}
-	else if (n == 1){
+	if (n == 0 || n == 1){
 		return 0;
 	}
 	else{
@@ -41,10 +38,7 @@ double d2Hn(double x, int n){
 }
 
 double d3Hn(double x, int n){
-	if (n == 0){
-		return 0;
-	}
-	else if (n == 1){
+	if (n == 0 || n == 1){
 		return 0;
 	}
 	else {
@@ -53,7 +47,6 @@ double d3Hn(double x, int n){
 }
 
 void make_spl(points_t * pts, spline_t * spl){
-	matrix_t* eqs = NULL;
 	double *x = pts->x;
 	double *y = pts->y;
 	double a = x[0]; // przypisz wspolrzedna x pierwszego punktu
@@ -65,7 +58,7 @@ void make_spl(points_t * pts, spline_t * spl){
 		nb = atoi( nbEnv ) + 1;
     }
 
-	eqs = make_matrix(nb, nb + 1);
+	matrix_t* eqs = make_matrix(nb, nb + 1);
 
 	for (int j = 0; j < nb; j++) {
 		for (int i = 0; i < nb; i++) {

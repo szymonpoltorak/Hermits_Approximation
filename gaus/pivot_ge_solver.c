@@ -29,16 +29,18 @@ int main (int argc, char **argv){
         write_matrix (c, stdout);
         printf ("Permutacja:");
 
-        for (int i = 0; i < c->rn; i++)
+        for (int i = 0; i < c->rn; i++){
           printf (" %d", row_per[i]);
+        }
         printf ("\n");
 
         if (bs_matrix (c) == 0) {
           int *iper = pivot_get_inv_per (c, row_per);
           printf ("Permutacja odwrotna:");
 
-          for (int i = 0; i < c->rn; i++)
+          for (int i = 0; i < c->rn; i++){
             printf (" %d", iper[i]);
+          }
           printf ("\n");
 
           printf ("\nPo podstawieniu wstecz:\n");

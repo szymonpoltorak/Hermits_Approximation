@@ -160,8 +160,9 @@ int main (int argc, char **argv){
         exit (EXIT_FAILURE);
       }
 
-      for (int i = 0; i < n; i++)
+      for (int i = 0; i < n; i++){
         fprintf (gpf, "%g %g\n", fromX + i * dx, value_spl (&spl, fromX + i * dx));
+      }
 
       fclose (gpf);
     }

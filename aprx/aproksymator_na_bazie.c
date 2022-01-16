@@ -10,19 +10,25 @@ double fi(double a, double b, int n, int i, double x){
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
 
-	for (int j = 0; j < 5; j++)
+	for (int j = 0; j < 5; j++){
 		hx[j] = a + h * hi[j];
+	}
 
-	if ((x < hx[0]) || (x > hx[4]))
+	if ((x < hx[0]) || (x > hx[4])){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
+	}
+	else if (x >= hx[0] && x <= hx[1]){
 		return 1 / h3 * (x - hx[0]) * (x - hx[0]) * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
+	}
+	else if (x > hx[1] && x <= hx[2]){
 		return 1 / h3 * (h3 + 3 * h * h * (x - hx[1]) + 3 * h * (x - hx[1]) * (x - hx[1]) - 3 * (x - hx[1]) * (x - hx[1]) * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
+	}
+	else if (x > hx[2] && x <= hx[3]){
 		return 1 / h3 * (h3 + 3 * h * h * (hx[3] - x) + 3 * h * (hx[3] - x) * (hx[3] - x) - 3 * (hx[3] - x) * (hx[3] - x) * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	}
+	else{
 		return 1 / h3 * (hx[4] - x) * (hx[4] - x) * (hx[4] - x);
+	}
 }
 
 double dfi(double a, double b, int n, int i, double x){
@@ -31,19 +37,25 @@ double dfi(double a, double b, int n, int i, double x){
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
 
-	for (int j = 0; j < 5; j++)
+	for (int j = 0; j < 5; j++){
 		hx[j] = a + h * hi[j];
+	}
 
-	if ((x < hx[0]) || (x > hx[4]))
+	if ((x < hx[0]) || (x > hx[4])){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
+	}
+	else if (x >= hx[0] && x <= hx[1]){
 		return 3 / h3 * (x - hx[0]) * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
+	}
+	else if (x > hx[1] && x <= hx[2]){
 		return 1 / h3 * (3 * h * h + 6 * h * (x - hx[1]) - 9 * (x - hx[1]) * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
+	}
+	else if (x > hx[2] && x <= hx[3]){
 		return 1 / h3 * (-3 * h * h - 6 * h * (hx[3] - x) + 9 * (hx[3] - x) * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	}
+	else{
 		return -3 / h3 * (hx[4] - x) * (hx[4] - x);
+	}
 }
 
 double d2fi(double a, double b, int n, int i, double x){
@@ -55,16 +67,21 @@ double d2fi(double a, double b, int n, int i, double x){
 	for (int j = 0; j < 5; j++)
 		hx[j] = a + h * hi[j];
 
-	if ((x < hx[0]) || (x > hx[4]))
+	if ((x < hx[0]) || (x > hx[4])){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
+	}
+	else if (x >= hx[0] && x <= hx[1]){
 		return 6 / h3 * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
+	}
+	else if (x > hx[1] && x <= hx[2]){
 		return 1 / h3 * (6 * h - 18 * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
+	}
+	else if (x > hx[2] && x <= hx[3]){
 		return 1 / h3 * (6 * h  -18 * (hx[3] - x));
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	}
+	else{
 		return 6 / h3 * (hx[4] - x);
+	}
 }
 
 double d3fi(double a, double b, int n, int i, double x){
@@ -73,19 +90,25 @@ double d3fi(double a, double b, int n, int i, double x){
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
 	double hx[5];
 
-	for (int j = 0; j < 5; j++)
+	for (int j = 0; j < 5; j++){
 		hx[j] = a + h * hi[j];
+	}
 
-	if ((x < hx[0]) || (x > hx[4]))
+	if ((x < hx[0]) || (x > hx[4])){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
+	}
+	else if (x >= hx[0] && x <= hx[1]){
 		return 6 / h3;
-	else if (x > hx[1] && x <= hx[2])
+	}
+	else if (x > hx[1] && x <= hx[2]){
 		return -18 / h3;
-	else if (x > hx[2] && x <= hx[3])
+	}
+	else if (x > hx[2] && x <= hx[3]){
 		return 18 / h3;
-	else			/* if (x > hx[3]) && (x <= hx[4]) */
+	}
+	else{
 		return -6 / h3;
+	}
 }
 
 void make_spl(points_t * pts, spline_t * spl){

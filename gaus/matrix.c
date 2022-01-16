@@ -5,8 +5,10 @@
 
 matrix_t *make_matrix (int rn, int cn){
   matrix_t *new_mat = (matrix_t*) malloc (sizeof *new_mat);
-  if (new_mat == NULL)
+
+  if (new_mat == NULL){
     return NULL;
+  }
   if ((new_mat->e = (double*) malloc ((size_t) rn * (size_t) cn * sizeof *new_mat->e)) == NULL) {
     free (new_mat);
     return NULL;
@@ -14,6 +16,7 @@ matrix_t *make_matrix (int rn, int cn){
   new_mat->rn = rn;
   new_mat->cn = cn;
   memset (new_mat->e, 0, (size_t) (rn * (size_t) cn * sizeof *new_mat->e));
+
   return new_mat;
 }
 
@@ -23,37 +26,46 @@ void free_matrix (matrix_t * m){
 }
 
 void put_entry_matrix (matrix_t * m, int i, int j, double val){
-  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn)
+  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn){
     m->e[i * m->cn + j] = val;
+  }
 }
 
 void add_to_entry_matrix (matrix_t * m, int i, int j, double val){
-  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn)
+  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn){
     m->e[i * m->cn + j] += val;
+  }
 }
 
 double get_entry_matrix (matrix_t * m, int i, int j ){
-  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn)
+  if (i >= 0 && i < m->rn && j >= 0 && j <= m->cn){
     return m->e[i * m->cn + j];
-	else
+  }
+	else{
 		return -999;
+  }
 }
 
 matrix_t *read_matrix (FILE * in){
   int rn, cn;
   matrix_t *new_mat;
-  if (fscanf (in, "%d %d", &rn, &cn) != 2)
-    return NULL;
 
-  if ((new_mat = make_matrix (rn, cn)) == NULL)
+  if (fscanf (in, "%d %d", &rn, &cn) != 2){
     return NULL;
+  }
 
-  for (int i = 0; i < rn; i++)
-    for (int j = 0; j < cn; j++)
+  if ((new_mat = make_matrix (rn, cn)) == NULL){
+    return NULL;
+  }
+
+  for (int i = 0; i < rn; i++){
+    for (int j = 0; j < cn; j++){
       if (fscanf (in, "%lf", &new_mat->e[i * cn + j]) != 1) {
         free_matrix (new_mat);
         return NULL;
       }
+    }
+  }
 
   return new_mat;
 }
@@ -66,8 +78,9 @@ void write_matrix (matrix_t * m, FILE * out){
 
   fprintf (out, "%d %d\n", m->rn, m->cn);
   for (int i = 0, j; i < m->rn; i++) {
-    for (j = 0; j < m->cn - 1; j++)
+    for (j = 0; j < m->cn - 1; j++){
       fprintf (out, "%8.5f ", m->e[i * m->cn + j]);
+    }
     fprintf (out, "%8.5f\n", m->e[i * m->cn + j]);
   }
 }
@@ -75,8 +88,9 @@ void write_matrix (matrix_t * m, FILE * out){
 matrix_t *copy_matrix (matrix_t * s){
   matrix_t *d = NULL;
 
-  if (s != NULL)
+  if (s != NULL){
     d = make_matrix (s->rn, s->cn);
+  }
   if (d != NULL) {
     memcpy (d->e, s->e, s->rn * s->cn * sizeof *s->e);
   }
@@ -160,9 +174,9 @@ int bs_matrix (matrix_t * a){
       for (int r = a->rn - 1; r >= 0; r--) {   /* petla po niewiadomych */
         double rhs = *(a->e + r * a->cn + k); /* wartość prawej strony */
         
-        for (int c = a->rn - 1; c > r; c--)    /* odejmujemy wartości już wyznaczonych niewiadomych *
-                                           pomnożone przed odpowiednie współczynniki */
+        for (int c = a->rn - 1; c > r; c--){    /* odejmujemy wartości już wyznaczonych niewiadomych pomnożone przed odpowiednie współczynniki */
           rhs -= *(a->e + r * a->cn + c) * *(a->e + c * a->cn + k);
+        }
         *(a->e + r * a->cn + k) = rhs / *(a->e + r * a->cn + r);    /* nowa wartość to prawa strona / el. diagonalny */
       }
     }
