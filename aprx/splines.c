@@ -40,14 +40,13 @@ void write_spl (spline_t * spl, FILE * ouf){
 }
 
 double value_spl (spline_t * spl, double x){
-  double dx;
   int i;
 
   for (i = spl->n - 1; i > 0; i--)
     if (spl->x[i] < x)
       break;
 
-  dx = x - spl->x[i];
+  double dx = x - spl->x[i];
 
   return spl->f[i] + dx * spl->f1[i] + dx * dx / 2 *  spl->f2[i] + dx * dx * dx / 6 * spl->f3[i];
 }

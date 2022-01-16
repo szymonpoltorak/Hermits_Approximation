@@ -2,9 +2,9 @@ MVBIN = -mv *.o gaus/*.o libge.a bin/
 FLAGS = -Wall -pedantic -Wextra
 CCC = cc -c
 CCO = cc -o
-DEL = -rm bin/*.o bin/libge.a aprox intrp prosta gen
+DEL = -rm bin/*.o bin/libge.a aprox intrp prosta gen hermit
 
-all: aprox gen intrp prosta
+all: aprox gen intrp hermit prosta
 
 aprox: main.o splines.o points.o aproksymator_na_bazie.o libge.a
 	$(CCO) $@  $^ -L gaus
@@ -12,9 +12,15 @@ aprox: main.o splines.o points.o aproksymator_na_bazie.o libge.a
 intrp: main.o splines.o points.o interpolator.o libge.a
 	$(CCO) $@  $^ -L gaus
 
+hermit: main.o splines.o points.o aprx_hermit.o libge.a
+	$(CCO) $@ $^ -L gaus
+
 prosta: main.o splines.o points.o prosta.o
 	$(CCO) $@  $^
 	$(MVBIN)
+
+aprx_hermit.o: aprx/aprx_hermit.c aprx/makespl.h gaus/piv_ge_solver.h aprx/points.h
+	$(CCC) -I gaus $< $(FLAGS)
 
 aproksymator_na_bazie.o: aprx/aproksymator_na_bazie.c aprx/makespl.h aprx/points.h gaus/piv_ge_solver.h
 	$(CCC) -I gaus $< $(FLAGS)

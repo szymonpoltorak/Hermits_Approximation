@@ -1,116 +1,55 @@
 #include "makespl.h"
 #include "piv_ge_solver.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
 
-/* UWAGA: liczbę używanych f. bazowych można ustawić przez wartość
-          zmiennej środowiskowej APPROX_BASE_SIZE
-*/
-
-/*
- * Funkcje bazowe: n - liczba funkcji a,b - granice przedzialu aproksymacji i
- * - numer funkcji x - wspolrzedna dla ktorej obliczana jest wartosc funkcji
- */
-
-static double fi(double a, double b, int n, int i, double x){
-	double h = (b - a) / (n - 1);
-	double h3 = h * h * h;
-	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double hx[5];
-
-	for (int j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
-		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 1 / h3 * (x - hx[0]) * (x - hx[0]) * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
-		return 1 / h3 * (h3 + 3 * h * h * (x - hx[1]) + 3 * h * (x - hx[1]) * (x - hx[1]) - 3 * (x - hx[1]) * (x - hx[1]) * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
-		return 1 / h3 * (h3 + 3 * h * h * (hx[3] - x) + 3 * h * (hx[3] - x) * (hx[3] - x) - 3 * (hx[3] - x) * (hx[3] - x) * (hx[3] - x));
-	else if ((x > hx[3]) && (x <= hx[4]))
-		return 1 / h3 * (hx[4] - x) * (hx[4] - x) * (hx[4] - x);
+double Hn(double x, int n){			
+	if ( n == 0 ) {
+		return 	1;
+	} 
+	else if ( n == 1 ) {
+		return 	2 * x;
+	} 
+	else {
+        return  2 * x * Hn(x, n - 1) - 2 * Hn(x, n - 1) * Hn(x, n - 2);
+	} 
 }
 
-/* Pierwsza pochodna fi */
-static double dfi(double a, double b, int n, int i, double x){
-	double h = (b - a) / (n - 1);
-	double h3 = h * h * h;
-	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double hx[5];
-
-	for (int j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
+double dHn(double x, int n){
+	if (n == 0){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 3 / h3 * (x - hx[0]) * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
-		return 1 / h3 * (3 * h * h + 6 * h * (x - hx[1]) - 9 * (x - hx[1]) * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
-		return 1 / h3 * (-3 * h * h - 6 * h * (hx[3] - x) + 9 * (hx[3] - x) * (hx[3] - x));
-	else if ((x > hx[3]) && (x <= hx[4]))
-		return -3 / h3 * (hx[4] - x) * (hx[4] - x);
+	}
+	else if (n == 1){
+		return 2;
+	}
+	else {
+		return 2 * Hn(x, n - 1) + 2 * x * dHn(x, n - 1) - 2 * (n - 1) * dHn(x, n - 2);
+	}
 }
 
-/* Druga pochodna fi */
-static double d2fi(double a, double b, int n, int i, double x){
-	double h = (b - a) / (n - 1);
-	double h3 = h * h * h;
-	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double hx[5];
-
-	for (int j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
+double d2Hn(double x, int n){
+	if (n == 0){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 6 / h3 * (x - hx[0]);
-	else if (x > hx[1] && x <= hx[2])
-		return 1 / h3 * (6 * h - 18 * (x - hx[1]));
-	else if (x > hx[2] && x <= hx[3])
-		return 1 / h3 * (6 * h  -18 * (hx[3] - x));
-	else if ((x > hx[3]) && (x <= hx[4]))
-		return 6 / h3 * (hx[4] - x);
+	}
+	else if (n == 1){
+		return 0;
+	}
+	else{
+		return 4 * dHn(x, n - 1) + 2 * x * d2Hn(x, n - 1) - 2 * (n - 1) * d2Hn(x, n - 2);
+	}
 }
 
-/* Trzecia pochodna fi */
-static double d3fi(double a, double b, int n, int i, double x){
-	double h = (b - a) / (n - 1);
-	double h3 = h * h * h;
-	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
-	double hx[5];
-
-	for (int j = 0; j < 5; j++)
-		hx[j] = a + h * hi[j];
-
-	if ((x < hx[0]) || (x > hx[4]))
+double d3Hn(double x, int n){
+	if (n == 0){
 		return 0;
-	else if (x >= hx[0] && x <= hx[1])
-		return 6 / h3;
-	else if (x > hx[1] && x <= hx[2])
-		return -18 / h3;
-	else if (x > hx[2] && x <= hx[3])
-		return 18 / h3;
-	else if ((x > hx[3]) && (x <= hx[4]))
-		return -6 / h3;
-}
-
-static double Hn(double x,int n){
-    if (n == 0){
-        return 1;
-    }
-    else if (n == 1){
-        return 2 * x;
-    }
-    else{
-        return 2 * x * Hn(x,n-1) - 2 * (n-1) * Hn(x,n-2);     
-    } 
+	}
+	else if (n == 1){
+		return 0;
+	}
+	else {
+		return 6 * d2Hn(x, n - 1) + 2 * x * d3Hn(x, n - 1) - 2 * (n - 1) * d3Hn(x, n - 2);
+	}
 }
 
 void make_spl(points_t * pts, spline_t * spl){
@@ -130,11 +69,11 @@ void make_spl(points_t * pts, spline_t * spl){
 	for (int j = 0; j < nb; j++) {
 		for (int i = 0; i < nb; i++) {
 			for (int k = 0; k < pts->n; k++) {
-				add_to_entry_matrix(eqs, j, i, fi(a, b, nb, i, x[k]) * fi(a, b, nb, j, x[k]));
+				add_to_entry_matrix(eqs, j, i, Hn(x[k],i) * Hn(x[k],j));
             }
         }
 		for (int k = 0; k < pts->n; k++){
-			add_to_entry_matrix(eqs, j, nb, y[k] * fi(a, b, nb, j, x[k]));
+			add_to_entry_matrix(eqs, j, nb, y[k] * Hn(x[k], j));
         }
 	}
 
@@ -147,7 +86,7 @@ void make_spl(points_t * pts, spline_t * spl){
 		for (int i = 0; i < spl->n; i++) {
 			double xx = spl->x[i] = a + i*(b-a)/(spl->n-1);
 			
-			xx+= 10.0 * DBL_EPSILON;  // zabezpieczenie przed ulokowaniem punktu w poprzednim przedziale
+			xx+= 10.0 * DBL_EPSILON;
 			spl->f[i] = 0;
 			spl->f1[i] = 0;
 			spl->f2[i] = 0;
@@ -156,10 +95,10 @@ void make_spl(points_t * pts, spline_t * spl){
 			for (int k = 0; k < nb; k++) {
 				double ck = get_entry_matrix(eqs, k, nb);
 				
-				spl->f[i]  += ck * fi  (a, b, nb, k, xx);
-				spl->f1[i] += ck * dfi (a, b, nb, k, xx);
-				spl->f2[i] += ck * d2fi(a, b, nb, k, xx);
-				spl->f3[i] += ck * d3fi(a, b, nb, k, xx);
+				spl->f[i]  += ck * Hn  (xx, k);
+				spl->f1[i] += ck * dHn (xx, k);
+				spl->f2[i] += ck * d2Hn(xx, k);
+				spl->f3[i] += ck * d3Hn(xx, k);
 			}
 		}
 	}
