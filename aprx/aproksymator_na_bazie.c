@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <float.h>
 
-double fi(double a, double b, int n, int i, double x){
+static double fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -31,7 +31,7 @@ double fi(double a, double b, int n, int i, double x){
 	}
 }
 
-double dfi(double a, double b, int n, int i, double x){
+static double dfi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -58,7 +58,7 @@ double dfi(double a, double b, int n, int i, double x){
 	}
 }
 
-double d2fi(double a, double b, int n, int i, double x){
+static double d2fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -84,7 +84,7 @@ double d2fi(double a, double b, int n, int i, double x){
 	}
 }
 
-double d3fi(double a, double b, int n, int i, double x){
+static double d3fi(double a, double b, int n, int i, double x){
 	double h = (b - a) / (n - 1);
 	double h3 = h * h * h;
 	int	hi[5] = {i - 2, i - 1, i, i + 1, i + 2};
@@ -112,7 +112,6 @@ double d3fi(double a, double b, int n, int i, double x){
 }
 
 void make_spl(points_t * pts, spline_t * spl){
-	matrix_t *eqs= NULL;
 	double *x = pts->x;
 	double *y = pts->y;
 	double a = x[0];
@@ -120,18 +119,22 @@ void make_spl(points_t * pts, spline_t * spl){
 	int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
 	char *nbEnv= getenv( "APPROX_BASE_SIZE" );
 
-	if( nbEnv != NULL && atoi( nbEnv ) > 0 )
+	if( nbEnv != NULL && atoi( nbEnv ) > 0 ){
 		nb = atoi( nbEnv );
+	}
 
-	eqs = make_matrix(nb, nb + 1);
+	matrix_t *eqs = make_matrix(nb, nb + 1);
 
 	for (int j = 0; j < nb; j++) {
-		for (int i = 0; i < nb; i++)
-			for (int k = 0; k < pts->n; k++)
+		for (int i = 0; i < nb; i++){
+			for (int k = 0; k < pts->n; k++){
 				add_to_entry_matrix(eqs, j, i, fi(a, b, nb, i, x[k]) * fi(a, b, nb, j, x[k]));
+			}
+		}
 
-		for (int k = 0; k < pts->n; k++)
+		for (int k = 0; k < pts->n; k++){
 			add_to_entry_matrix(eqs, j, nb, y[k] * fi(a, b, nb, j, x[k]));
+		}
 	}
 
 	if (piv_ge_solver(eqs)) {

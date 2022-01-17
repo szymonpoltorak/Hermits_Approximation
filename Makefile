@@ -15,6 +15,63 @@ intrp: main.o splines.o points.o interpolator.o libge.a
 hermit: main.o splines.o points.o aprx_hermit.o libge.a
 	$(CCO) $@ $^ -L gaus
 
+test_hermit: hermit
+	echo
+	echo Testuje uzycie punktow z aproksymacja
+	echo
+	./hermit -s spl -p test/dane.1 -g myplot -f 5.1 -t 5.7 -n 300
+	gnuplot -p -e "plot 'test/dane.1', 'myplot'"
+	echo
+	echo Testuje uzycie funkcji sklejanych bez uzycia punktow
+	echo
+	./hermit -s spl  -g innyplot -f 5.6 -t 5.997 -n 300
+	gnuplot -p -e "plot 'myplot', 'innyplot'"
+	echo
+	echo Testuje uzycie funkcji sklejach z uzyciem punktow
+	echo
+	./hermit -s spl -p test/dane.1 -g 3spl
+	gnuplot -p -e "plot 'test/dane.1', '3spl'"
+	$(MVBIN)
+	-rm myplot innyplot 3spl
+
+test_aprox: aprox
+	echo
+	echo Testuje uzycie punktow z aproksymacja
+	echo
+	./aprox -s spl -p test/dane.1 -g myplot -f 5.1 -t 5.7 -n 300
+	gnuplot -p -e "plot 'test/dane.1', 'myplot'"
+	echo
+	echo Testuje uzycie funkcji sklejanych bez uzycia punktow
+	echo
+	./aprox -s spl  -g innyplot -f 5.6 -t 5.997 -n 300
+	gnuplot -p -e "plot 'myplot', 'innyplot'"
+	echo
+	echo Testuje uzycie funkcji sklejach z uzyciem punktow
+	echo
+	./aprox -s spl -p test/dane.1 -g 3spl
+	gnuplot -p -e "plot 'test/dane.1', '3spl'"
+	$(MVBIN)
+	-rm myplot innyplot 3spl
+
+test_intrp: intrp
+	echo
+	echo Testuje uzycie punktow z aproksymacja
+	echo
+	./intrp -s spl -p test/dane.1 -g myplot -f 5.1 -t 5.7 -n 300
+	gnuplot -p -e "plot 'test/dane.1', 'myplot'"
+	echo
+	echo Testuje uzycie funkcji sklejanych bez uzycia punktow
+	echo
+	./intrp -s spl  -g innyplot -f 5.6 -t 5.997 -n 300
+	gnuplot -p -e "plot 'myplot', 'innyplot'"
+	echo
+	echo Testuje uzycie funkcji sklejach z uzyciem punktow
+	echo
+	./intrp -s spl -p test/dane.1 -g 3spl
+	gnuplot -p -e "plot 'test/dane.1', '3spl'"
+	$(MVBIN)
+	-rm myplot innyplot 3spl
+
 prosta: main.o splines.o points.o prosta.o
 	$(CCO) $@  $^
 	$(MVBIN)

@@ -5,11 +5,6 @@ static int realloc_pts_failed (points_t * pts, int size) {
   return realloc (pts->x, size * sizeof *pts->x) == NULL || realloc (pts->y, size * sizeof *pts->y) == NULL;
 }
 
-void free_points(points_t* pts){
-  free(pts -> x);
-  free(pts -> y);
-}
-
 int read_pts_failed (FILE * inf, points_t * pts){
   int size; // potrzebna do alokowania pamieci
   double x, y;

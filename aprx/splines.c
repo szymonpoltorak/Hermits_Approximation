@@ -4,14 +4,6 @@
 
 #define MALLOC_FAILED( P, SIZE ) (((P)=malloc( (SIZE)*sizeof( *(P))))==NULL)
 
-void free_splines(spline_t* spl) {
-	free(spl->x);
-	free(spl->f);
-	free(spl->f1);
-	free(spl->f2);
-	free(spl->f3);
-}
-
 int alloc_spl (spline_t * spl, int n){
   spl->n = n;
 

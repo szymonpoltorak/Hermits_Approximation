@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <float.h>
 
-double Hn(double x, int n){
+static double Hn(double x, int n){
 	if (n == 0) {
 		return 	1;
 	}
@@ -12,11 +12,11 @@ double Hn(double x, int n){
 		return 	2 * x;
 	}
 	else {
-    return  2 * x * Hn(x, n - 1) - 2 * (n - 1) * Hn(x, n - 2);
+    	return  2 * x * Hn(x, n - 1) - 2 * (n - 1) * Hn(x, n - 2);
 	}
 }
 
-double dHn(double x, int n){
+static double dHn(double x, int n){
 	if (n == 0){
 		return 0;
 	}
@@ -28,7 +28,7 @@ double dHn(double x, int n){
 	}
 }
 
-double d2Hn(double x, int n){
+static double d2Hn(double x, int n){
 	if (n == 0 || n == 1){
 		return 0;
 	}
@@ -37,7 +37,7 @@ double d2Hn(double x, int n){
 	}
 }
 
-double d3Hn(double x, int n){
+static double d3Hn(double x, int n){
 	if (n == 0 || n == 1){
 		return 0;
 	}
@@ -49,14 +49,14 @@ double d3Hn(double x, int n){
 void make_spl(points_t * pts, spline_t * spl){
 	double *x = pts->x;
 	double *y = pts->y;
-	double a = x[0]; // przypisz wspolrzedna x pierwszego punktu
-	double b = x[pts->n - 1]; // przypisz wspolrzedna ostatniego punktu
-  int	nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
+	double a = x[0];
+	double b = x[pts->n - 1];
+	int nb = pts->n - 3 > 10 ? 10 : pts->n - 3;
 	char *nbEnv= getenv( "APPROX_BASE_SIZE" );
 
 	if( nbEnv != NULL && atoi( nbEnv ) >= 0 ) {
 		nb = atoi( nbEnv ) + 1;
-  }
+	}
 
 	matrix_t* eqs = make_matrix(nb, nb + 1);
 
@@ -64,14 +64,15 @@ void make_spl(points_t * pts, spline_t * spl){
 		for (int i = 0; i < nb; i++) {
 			for (int k = 0; k < pts->n; k++) {
 				add_to_entry_matrix(eqs, j, i, Hn(x[k],i) * Hn(x[k],j));
-      }
-  	}
+			}
+      	}
+
 		for (int k = 0; k < pts->n; k++){
 			add_to_entry_matrix(eqs, j, nb, y[k] * Hn(x[k], j));
-    }
+    	}
 	}
 
-	if (piv_ge_solver(eqs)) { // obsluga bledu przy eliminacji gaussa
+	if (piv_ge_solver(eqs)) {
 		spl->n = 0;
 		return;
 	}
