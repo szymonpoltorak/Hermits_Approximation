@@ -6,7 +6,7 @@ static int realloc_pts_failed (points_t * pts, int size) {
 }
 
 int read_pts_failed (FILE * inf, points_t * pts){
-  int size; // potrzebna do alokowania pamieci
+  int size;
   double x, y;
 
   if (pts->n == 0) {
