@@ -61,3 +61,10 @@ hermit
 3spl
 
 innyplot
+
+*.aux
+*.fls
+*.synctex.gz
+*.log
+*.fdb_latexmk
+*.toc

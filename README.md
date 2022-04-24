@@ -7,4 +7,4 @@ To delete working files in directory after finishing your contact with program u
 ```make clean```
 # Run info
 To findout about the program syntax just compile it and use :\
-`./aprox`
+`./hermit`
