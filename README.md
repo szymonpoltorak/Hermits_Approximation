@@ -1,7 +1,10 @@
 # Projekt
-Projekt tworzony w ramach zajęć laboratoryjnych z języków i metod programowania na kierunku Informatyka Stosowana w zespołach dwu-osobowych. Celem zajęć było napisanie aproksymatora, który wykorzystuje wielomiany hermite'a. Program jest stworzony pod współpracę z programem `gnuplot`
+Project created during laboratory class on first term of Applied Computer Science. Our goal was to design aproximation function using Hermit's polynomials. Program was made to cooperate with `gnuplot`.
 # Kompilacja programu
-Kompilacja odbywa się poprzez wywołanie:\
+To compile program use:\
 ```make```\
-Natomiast usunięcie plików po zakończeniu korzystania z programu odbywa się poprzez wykorzystanie komendy:\
+To delete working files in directory after finishing your contact with program use:\
 ```make clean```
+# Run info
+To findout about the program syntax just compile it and use :\
+`./aprox`
